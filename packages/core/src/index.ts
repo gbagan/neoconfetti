@@ -62,19 +62,19 @@ type ConfettiOptions = {
 	force?: number;
 
 	/**
-	 * Height of the stage in pixels. Confetti will only fall within this height.
+	 * Height of the stage in CSS units. Confetti will only fall within this height.
 	 *
-	 * @default 800
+	 * @default 800px
 	 */
 
-	stageHeight?: number;
+	stageHeight?: string | number;
 
 	/**
-	 * Width of the stage in pixels. Confetti will only fall within this width.
+	 * Width of the stage in CSS units. Confetti will only fall within this width.
 	 *
-	 * @default 1600
+	 * @default 1600px
 	 */
-	stageWidth?: number;
+	stageWidth?: string | number;
 
 	/**
 	 * Whether or not destroy all confetti nodes after the `duration` period has passed. By default it destroys all nodes, to preserve memory.
@@ -93,8 +93,8 @@ const DEFAULT_PARTICLE_SHAPE = 'mix' as ParticleShape;
 const DEFAULT_PARTICLE_SIZE = 12;
 const DEFAULT_PARTICLE_CLASS = '';
 const DEFAULT_DESTROY_AFTER_DONE = true;
-const DEFAULT_STAGE_HEIGHT = 800;
-const DEFAULT_STAGE_WIDTH = 1600;
+const DEFAULT_STAGE_HEIGHT = "800px";
+const DEFAULT_STAGE_WIDTH = "1600px";
 
 export function confetti(container: HTMLElement, options: ConfettiOptions = {}) {
 	let {
@@ -110,10 +110,13 @@ export function confetti(container: HTMLElement, options: ConfettiOptions = {}) 
 		stageWidth = DEFAULT_STAGE_WIDTH,
 	} = options;
 
+    stageHeight = typeof stageHeight === 'number' ? stageHeight + 'px' : stageHeight;
+    stageWidth = typeof stageWidth === 'number' ? stageWidth + 'px' : stageWidth;
+
 	append_styles(styles);
 	container.classList.add(c_container);
 	// stage-height
-	container.style.setProperty('--sh', stageHeight + 'px');
+	container.style.setProperty('--sh', stageHeight);
 
 	let particles: Particle[] = [];
 	let nodes: HTMLElement[] = [];
@@ -135,7 +138,7 @@ export function confetti(container: HTMLElement, options: ConfettiOptions = {}) 
 		set_css_var(
 			// x landing point
 			'--xlp',
-			map_range(abs(rotate(degree, 90) - 180), 0, 180, -stageWidth / 2, stageWidth / 2) + 'px'
+            `calc(${abs(rotate(degree, 90) - 180) / 180 - 0.5} * (${stageWidth}))`
 		);
 		set_css_var(
 			// duration chaos
