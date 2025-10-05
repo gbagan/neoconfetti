@@ -138,7 +138,7 @@ export function confetti(container: HTMLElement, options: ConfettiOptions = {}) 
 		set_css_var(
 			// x landing point
 			'--xlp',
-            `calc(${abs(rotate(degree, 90) - 180) / 180 - 0.5} * (${stageWidth}))`
+            `calc(${abs(rotate(degree, 90) - 180) / 180 - 0.5} * ${stageWidth})`
 		);
 		set_css_var(
 			// duration chaos
